@@ -7,17 +7,17 @@ import androidx.compose.foundation.layout.Column
 import androidx.compose.foundation.layout.Row
 import androidx.compose.foundation.layout.fillMaxSize
 import androidx.compose.foundation.layout.fillMaxWidth
-import androidx.compose.foundation.layout.imePadding
 import androidx.compose.foundation.layout.padding
 import androidx.compose.foundation.layout.size
 import androidx.compose.foundation.layout.widthIn
 import androidx.compose.foundation.shape.RoundedCornerShape
 import androidx.compose.material.icons.Icons
 import androidx.compose.material.icons.filled.Add
+import androidx.compose.material.icons.filled.LocationOn
+import androidx.compose.material.icons.filled.Person
 import androidx.compose.material3.Icon
 import androidx.compose.material3.IconButton
 import androidx.compose.material3.MaterialTheme
-import androidx.compose.material3.Scaffold
 import androidx.compose.material3.Text
 import androidx.compose.runtime.Composable
 import androidx.compose.ui.Alignment
@@ -27,12 +27,11 @@ import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
 import androidx.navigation.NavController
-import com.oxyhotels.admin.feature_manage_hotel.presentation.AddHotelRoute
-import com.oxyhotels.admin.feature_manage_hotel.presentation.AddPriceScreenRoute
-import com.oxyhotels.admin.feature_manage_hotel.presentation.hotels.HotelsState
 import com.oxyhotels.admin.common.composables.Screen
-import com.oxyhotels.admin.feature_manage_hotel.presentation.AnalyticsScreenRoute
-import com.oxyhotels.admin.feature_manage_hotel.presentation.BookingManageRoute
+import com.oxyhotels.admin.feature_manage_hotel.presentation.AddHotelRoute
+import com.oxyhotels.admin.feature_manage_hotel.presentation.AllLocationsScreenRoute
+import com.oxyhotels.admin.feature_manage_hotel.presentation.ManagerScreensRoute
+import com.oxyhotels.admin.feature_manage_hotel.presentation.hotels.HotelsState
 
 @Composable
 
@@ -69,9 +68,9 @@ fun AllHotelsScreen(
 
         Column(
             modifier = Modifier
-                .widthIn(max = 330.dp , min = 300.dp)
+                .widthIn(max = 330.dp, min = 300.dp)
         ) {
-            
+
             Row(
                 modifier = Modifier
                     .fillMaxWidth()
@@ -89,46 +88,48 @@ fun AllHotelsScreen(
                         color = MaterialTheme.colorScheme.background
                     )
                 )
-                
-                IconButton(onClick = {
-                    navController.navigate(AddHotelRoute.route){
-                        launchSingleTop = true
-                    }
-                }) {
-                    Icon(
-                        imageVector = Icons.Default.Add,
-                        contentDescription = "",
-                        modifier = Modifier.size(18.dp),
-                        tint = MaterialTheme.colorScheme.background
-                    )
-                }
-            }
 
-
-            Row(
-                modifier = Modifier
-                    .fillMaxWidth()
-                    .padding(vertical = 10.dp)
-                    .clip(RoundedCornerShape(6.dp))
-                    .background(MaterialTheme.colorScheme.secondary)
-                    .clickable(onClick = {
-                        navController.navigate(AnalyticsScreenRoute.route){
+                Row {
+                    IconButton(onClick = {
+                        navController.navigate(ManagerScreensRoute.route) {
                             launchSingleTop = true
                         }
-                    })
-                    .padding(horizontal = 10.dp),
-                horizontalArrangement = Arrangement.SpaceBetween,
-                verticalAlignment = Alignment.CenterVertically
-            ) {
-                Text(
-                    text = "Analytics",
-                    style = MaterialTheme.typography.headlineSmall.copy(
-                        fontSize = 20.sp,
-                        color = MaterialTheme.colorScheme.background
-                    )
-                )
-            }
+                    }) {
+                        Icon(
+                            imageVector = Icons.Default.Person,
+                            contentDescription = "",
+                            modifier = Modifier.size(18.dp),
+                            tint = MaterialTheme.colorScheme.background
+                        )
+                    }
 
+                    IconButton(onClick = {
+                        navController.navigate(AllLocationsScreenRoute.route) {
+                            launchSingleTop = true
+                        }
+                    }) {
+                        Icon(
+                            imageVector = Icons.Default.LocationOn,
+                            contentDescription = "",
+                            modifier = Modifier.size(18.dp),
+                            tint = MaterialTheme.colorScheme.background
+                        )
+                    }
+
+                    IconButton(onClick = {
+                        navController.navigate(AddHotelRoute.route) {
+                            launchSingleTop = true
+                        }
+                    }) {
+                        Icon(
+                            imageVector = Icons.Default.Add,
+                            contentDescription = "",
+                            modifier = Modifier.size(18.dp),
+                            tint = MaterialTheme.colorScheme.background
+                        )
+                    }
+                }
+            }
 
             state.hotels.map {
 
@@ -139,6 +140,11 @@ fun AllHotelsScreen(
                         .clip(RoundedCornerShape(10.dp))
                         .fillMaxSize()
                         .background(MaterialTheme.colorScheme.onBackground)
+                        .clickable(onClick = {
+                            navController.navigate("${AddHotelRoute.route}?isEnabled=false&hotelId=${it._id}") {
+                                launchSingleTop = true
+                            }
+                        })
                         .padding(10.dp)
                 ) {
 
@@ -185,22 +191,6 @@ fun AllHotelsScreen(
                         }
                     }
 
-                    Row(
-                        modifier = Modifier.fillMaxWidth(),
-                        horizontalArrangement = Arrangement.SpaceBetween
-                    ) {
-
-                        HotelButton(text = "Price", isLoading = false) {
-                            navController.navigate("${AddPriceScreenRoute.route}?hotelId=${it._id}") {
-                                launchSingleTop = true
-                            }
-                        }
-                        HotelButton(text = "Booking", isLoading = false) {
-                            navController.navigate(BookingManageRoute.route+"/hotelId=${it._id}"){
-                                launchSingleTop = true
-                            }
-                        }
-                    }
                 }
 
             }

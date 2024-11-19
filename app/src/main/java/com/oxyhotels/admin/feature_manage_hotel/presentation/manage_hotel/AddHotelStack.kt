@@ -67,7 +67,7 @@ fun AddHotelStack(
     hotelStorage: HotelStorage? = null,
     pNavController: NavHostController,
     onSave: (HotelStorage) -> Unit,
-    ) {
+) {
 
     val state = viewModel.state.collectAsState()
     val addBasicDetailViewModel = remember {
@@ -88,7 +88,7 @@ fun AddHotelStack(
     val addHotelStructureViewModel = remember {
         AddHotelStructureViewModel(
             addHotelStructureState = AddHotelStructureState(
-                hotelStorage?.hotelStructure ?: mutableListOf()
+                hotelStorage?.hotelStructure?.map { it.value } ?: mutableListOf()
             )
         )
     }
@@ -136,7 +136,9 @@ fun AddHotelStack(
             imageData = Converters.convertImageToMap(addImagesViewModel.state.value.imageData),
             roomTypes = Converters.convertRoomTypeToMap(addRoomTypeViewModel.state.value.roomTypes),
             nearBy = Converters.convertNearbyToMap(addNearByViewModel.state.value.nearBy),
-            hotelStructure = addHotelStructureViewModel.state.value.structure
+            hotelStructure = addHotelStructureViewModel.state.value.structure,
+            isHotelListed = addBasicDetailViewModel.state.value.isHotelListed,
+            tid = addBasicDetailViewModel.state.value.tid
         )
 
         life.lifecycleScope.launch {
@@ -243,7 +245,10 @@ fun AddHotelStack(
                 isEnabled = isEnabled
             ) {
                 if (isEnabled) {
-                    val check = dataValidation.floorTypeDataValidation(it,addHotelStructureViewModel.state.value)
+                    val check = dataValidation.floorTypeDataValidation(
+                        it,
+                        addHotelStructureViewModel.state.value
+                    )
                     if (check.isNotEmpty()) {
                         showMessage(check)
                     } else {

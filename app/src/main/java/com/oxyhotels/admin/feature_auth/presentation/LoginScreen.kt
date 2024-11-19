@@ -77,10 +77,10 @@ fun LoginScreen(
 
             Spacer(modifier = Modifier.weight(1f))
 
-            AuthLabel(text = "Phone")
+            AuthLabel(text = "Username")
             AuthInput(
-                value = state.value.phoneNumber,
-                onValueChange = {loginViewModel.updatePhoneNumber(it)},
+                value = state.value.username,
+                onValueChange = {loginViewModel.updateUsername(it)},
                 keyboardActions = KeyboardActions(
                     onNext = {
                         focusManager.moveFocus(FocusDirection.Next)
@@ -88,9 +88,9 @@ fun LoginScreen(
                 ),
                 keyboardOptions = KeyboardOptions.Default.copy(
                     imeAction = ImeAction.Next,
-                    keyboardType = KeyboardType.Number
+                    keyboardType = KeyboardType.Ascii
                 ),
-                placeholderText = "Enter Your Phone Number"
+                placeholderText = "Enter Your Username"
             )
 
             AuthLabel(text = "Password")

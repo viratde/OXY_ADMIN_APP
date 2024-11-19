@@ -40,10 +40,10 @@ class LoginViewModel @Inject constructor(
         }
     }
 
-    fun updatePhoneNumber(phone:String){
+    fun updateUsername(username:String){
         _state.update {
             state.value.copy(
-                phoneNumber = phone
+                username = username
             )
         }
     }
@@ -62,12 +62,12 @@ class LoginViewModel @Inject constructor(
             state.value.copy(isLoading = true)
         }
 
-        if(state.value.phoneNumber.let{ it.isEmpty() || it.toDoubleOrNull() == null || it.length != 10 }){
+        if(state.value.username.let{ it.isEmpty() || it.length < 8 }){
             _state.update {
                 state.value.copy(
                     isLoading = false,
                     isError = true,
-                    errorMessage = "Please Enter Correct Phone Number"
+                    errorMessage = "Please Enter Correct Username"
                 )
             }
             return
@@ -90,10 +90,10 @@ class LoginViewModel @Inject constructor(
         }
 
         val jsonObject = JSONObject()
-        jsonObject.put("phone",state.value.phoneNumber)
+        jsonObject.put("username",state.value.username)
         jsonObject.put("password",state.value.password)
         try{
-            val response:String = client.post("${Constant.domain}${Constant.authRoute}"){
+            val response:String = client.post("${Constant.DOMAIN}${Constant.authRoute}"){
                 headers {
                     append("Content-Type","application/json")
                 }

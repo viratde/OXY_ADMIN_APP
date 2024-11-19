@@ -33,11 +33,10 @@ class MainActivity : ComponentActivity() {
                     val state = loginViewModel.state.collectAsState()
 
                     if (state.value.authToken != null) {
-                       MainStack(token = state.value.authToken!!)
+                        HotelStack()
                     } else {
                         LoginScreen(loginViewModel = loginViewModel)
                     }
-
                 }
             }
         }

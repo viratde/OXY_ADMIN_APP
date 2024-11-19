@@ -19,25 +19,25 @@ import androidx.compose.ui.unit.dp
 
 @Composable
 fun HotelTextFieldInput(
-    value:String,
-    onValueChange:(String) -> Unit,
+    value: String,
+    onValueChange: (String) -> Unit,
     textStyle: TextStyle,
-    keyboardOptions: KeyboardOptions=KeyboardOptions.Default,
-    keyboardActions: KeyboardActions= KeyboardActions.Default,
-    placeHolderText:String,
-    backgroundColor:Color,
-    modifier: Modifier=Modifier,
-    isEnabled:Boolean
-){
+    keyboardOptions: KeyboardOptions = KeyboardOptions.Default,
+    keyboardActions: KeyboardActions = KeyboardActions.Default,
+    placeHolderText: String,
+    backgroundColor: Color,
+    modifier: Modifier = Modifier,
+    isEnabled: Boolean
+) {
     BasicTextField(
         value = value,
         onValueChange = {
             onValueChange(it)
-                        },
+        },
         textStyle = textStyle,
         singleLine = false,
         enabled = isEnabled,
-        decorationBox = {innerTextField ->  
+        decorationBox = { innerTextField ->
             Row(
                 modifier = modifier
                     .background(backgroundColor)
@@ -45,8 +45,8 @@ fun HotelTextFieldInput(
             ) {
                 Box(
                     modifier = Modifier.fillMaxWidth()
-                ){
-                    if(value.isEmpty()){
+                ) {
+                    if (value.isEmpty()) {
                         Text(
                             text = placeHolderText,
                             style = textStyle
@@ -56,7 +56,12 @@ fun HotelTextFieldInput(
                 }
             }
         },
-        cursorBrush = Brush.linearGradient(listOf(MaterialTheme.colorScheme.secondary, MaterialTheme.colorScheme.secondary)),
+        cursorBrush = Brush.linearGradient(
+            listOf(
+                MaterialTheme.colorScheme.secondary,
+                MaterialTheme.colorScheme.secondary
+            )
+        ),
         keyboardActions = keyboardActions,
         keyboardOptions = keyboardOptions
     )

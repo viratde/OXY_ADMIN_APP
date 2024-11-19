@@ -1,7 +1,10 @@
 package com.oxyhotels.admin.feature_manage_hotel.presentation.manage_hotel.screens
 
+import androidx.compose.animation.AnimatedVisibility
 import androidx.compose.foundation.background
 import androidx.compose.foundation.border
+import androidx.compose.foundation.layout.Arrangement
+import androidx.compose.foundation.layout.Row
 import androidx.compose.foundation.layout.fillMaxHeight
 import androidx.compose.foundation.layout.fillMaxSize
 import androidx.compose.foundation.layout.fillMaxWidth
@@ -28,13 +31,14 @@ import com.oxyhotels.admin.feature_manage_hotel.presentation.manage_hotel.viewmo
 import com.oxyhotels.admin.common.composables.Screen
 import com.oxyhotels.admin.feature_manage_hotel.presentation.manage_hotel.components.AddHotelButton
 import com.oxyhotels.admin.feature_manage_hotel.presentation.manage_hotel.components.AddHotelHeader
+import com.oxyhotels.admin.feature_manage_hotel.presentation.manage_hotel.components.HotelBooleanInput
 import com.oxyhotels.admin.feature_manage_hotel.presentation.manage_hotel.components.HotelTextFieldInput
 import com.oxyhotels.admin.feature_manage_hotel.presentation.manage_hotel.components.HotelTimePicker
 
 @Composable
 fun AddBasicDetailScreen(
     viewModel: AddBasicDetailViewModel,
-    isEnabled:Boolean = true,
+    isEnabled: Boolean = true,
     onNext: () -> Unit
 ) {
 
@@ -142,7 +146,13 @@ fun AddBasicDetailScreen(
                 )
 
                 HotelTextFieldInput(
-                    value = state.value.minPrice.let { if(it == 0){""}else{it.toString()} },
+                    value = state.value.minPrice.let {
+                        if (it == 0) {
+                            ""
+                        } else {
+                            it.toString()
+                        }
+                    },
                     onValueChange = { viewModel.setMinimumPrice(it) },
                     textStyle = MaterialTheme.typography.headlineSmall.copy(
                         fontSize = 14.sp,
@@ -168,7 +178,13 @@ fun AddBasicDetailScreen(
                 )
 
                 HotelTextFieldInput(
-                    value = state.value.maxPrice.let { if(it == 0){""}else{it.toString()} },
+                    value = state.value.maxPrice.let {
+                        if (it == 0) {
+                            ""
+                        } else {
+                            it.toString()
+                        }
+                    },
                     onValueChange = { viewModel.setMaximumPrice(it) },
                     textStyle = MaterialTheme.typography.headlineSmall.copy(
                         fontSize = 14.sp,
@@ -243,6 +259,7 @@ fun AddBasicDetailScreen(
                         .padding(horizontal = 10.dp),
                     isEnabled = isEnabled
                 )
+
 
                 HotelTextFieldInput(
                     value = state.value.locationUrl,
@@ -320,6 +337,20 @@ fun AddBasicDetailScreen(
                         .padding(top = 10.dp)
                         .border(1.dp, Color.White, RoundedCornerShape(6.dp))
                         .padding(horizontal = 10.dp),
+                    isEnabled = isEnabled
+                )
+
+                HotelBooleanInput(
+                    value = state.value.isHotelListed,
+                    title = "isListed",
+                    backgroundColor = MaterialTheme.colorScheme.onBackground,
+                    textStyle = MaterialTheme.typography.headlineSmall.copy(
+                        fontSize = 14.sp,
+                        color = Color.White
+                    ),
+                    onValueChange = {
+                        viewModel.toggleListedState()
+                    },
                     isEnabled = isEnabled
                 )
 
@@ -404,6 +435,47 @@ fun AddBasicDetailScreen(
                     isEnabled = isEnabled
                 )
 
+                HotelBooleanInput(
+                    value = state.value.tid != null,
+                    title = "Tid",
+                    backgroundColor = MaterialTheme.colorScheme.onBackground,
+                    textStyle = MaterialTheme.typography.headlineSmall.copy(
+                        fontSize = 14.sp,
+                        color = Color.White
+                    ),
+                    onValueChange = {
+                        viewModel.setTid(if (it) "" else null)
+                    },
+                    isEnabled = isEnabled
+                )
+
+                if (state.value.tid != null) {
+                    HotelTextFieldInput(
+                        value = state.value.tid!!,
+                        onValueChange = { viewModel.setTid(it) },
+                        textStyle = MaterialTheme.typography.headlineSmall.copy(
+                            fontSize = 14.sp,
+                            color = Color.White
+                        ),
+                        placeHolderText = "Terminal Id",
+                        backgroundColor = MaterialTheme.colorScheme.onBackground,
+                        keyboardOptions = KeyboardOptions.Default.copy(
+                            keyboardType = KeyboardType.Number,
+                            imeAction = ImeAction.Next
+                        ),
+                        keyboardActions = KeyboardActions(onNext = {
+                            focusManager.moveFocus(
+                                FocusDirection.Next
+                            )
+                        }),
+                        modifier = Modifier
+                            .padding(top = 10.dp)
+                            .border(1.dp, Color.White, RoundedCornerShape(6.dp))
+                            .padding(horizontal = 10.dp),
+                        isEnabled = isEnabled
+                    )
+                }
+
                 AddHotelButton(text = "Next", isLoading = false) {
                     onNext()
                 }
@@ -411,6 +483,6 @@ fun AddBasicDetailScreen(
 
             }
 
-            }
+        }
     }
 }

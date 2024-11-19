@@ -19,7 +19,7 @@ class DataValidation {
             return "Please Enter Correct Hotel Id";
         }
 
-        if (addBasicDetailState.phoneNo.isEmpty() || addBasicDetailState.phoneNo.length != 10) {
+        if (addBasicDetailState.phoneNo.isEmpty() || addBasicDetailState.phoneNo.length != 12) {
             return "Please Enter Correct Phone Number";
         }
 
@@ -47,8 +47,8 @@ class DataValidation {
             return "Please Enter Correct Address";
         }
 
-        if (addBasicDetailState.hotelDescription.isEmpty()) {
-            return "Please Enter Correct Description";
+        if (addBasicDetailState.hotelDescription.isEmpty() || addBasicDetailState.hotelDescription.length < 100) {
+            return "Please Enter Correct Description of 100 letters";
         }
         return ""
     }

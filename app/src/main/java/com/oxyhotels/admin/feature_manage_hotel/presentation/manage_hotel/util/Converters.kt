@@ -62,14 +62,16 @@ class Converters {
                 phoneNo = hotelStorage.phoneNo,
                 minPrice = hotelStorage.minPrice,
                 maxPrice = hotelStorage.maxPrice,
-                latitude = hotelStorage.latitude,
-                longitude = hotelStorage.longitude,
+                latitude = hotelStorage.latitude.toString(),
+                longitude = hotelStorage.longitude.toString(),
                 locationUrl = hotelStorage.locationUrl,
                 hotelAddress = hotelStorage.hotelAddress,
                 hotelDescription = hotelStorage.hotelDescription,
                 checkInTime = hotelStorage.checkIn,
                 checkOutTime = hotelStorage.checkOut,
-                refundPercentage = hotelStorage.refundPercentage
+                refundPercentage = hotelStorage.refundPercentage.toString(),
+                isHotelListed = hotelStorage.isHotelListed,
+                tid = hotelStorage.tid
             )
         }
 
@@ -80,10 +82,10 @@ class Converters {
                 return AddPoliciesState()
             }
             return AddPoliciesState(
-                restrictions = hotelStorage.restrictions,
-                houseAmenities = hotelStorage.houseAmenities,
-                housePoliciesDonts = hotelStorage.housePoliciesDonts,
-                housePoliciesDos = hotelStorage.housePoliciesDos
+                restrictions = hotelStorage.restrictions.toMutableList(),
+                houseAmenities = hotelStorage.houseAmenities.toMutableList(),
+                housePoliciesDonts = hotelStorage.housePoliciesDonts.toMutableList(),
+                housePoliciesDos = hotelStorage.housePoliciesDos.toMutableList()
             )
         }
 
@@ -103,7 +105,7 @@ class Converters {
                 val images : MutableList<String> = mutableListOf()
 
                 for (j in i.value){
-                    images.add("${Constant.domain}${j}")
+                    images.add("${Constant.DOMAIN}${j}")
                 }
 
                 newImageData.add(

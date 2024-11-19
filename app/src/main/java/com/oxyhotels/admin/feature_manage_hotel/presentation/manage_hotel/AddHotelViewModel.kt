@@ -176,7 +176,7 @@ class AddHotelViewModel @Inject constructor(
                     for (i in addHotelData.imageData) {
                         oMap[i.key] = mutableListOf()
                         for (j in i.value) {
-                            if (j.startsWith(Constant.domain)) {
+                            if (j.startsWith(Constant.DOMAIN)) {
                                 val newMutableList = oMap[i.key]?.toMutableList()
                                 if (newMutableList != null) {
                                     newMutableList.add(j)
@@ -236,7 +236,7 @@ class AddHotelViewModel @Inject constructor(
                 val values = mutableListOf<String>()
                 if (serverImageData != null) {
                     for (j in i.value) {
-                        if (!j.startsWith(Constant.domain)) {
+                        if (!j.startsWith(Constant.DOMAIN)) {
                             values.add(serverImageData[map[j].toString()].toString())
                         }
                     }
@@ -244,7 +244,7 @@ class AddHotelViewModel @Inject constructor(
                 val oValues = oMap[i.key]
                 if (oValues != null) {
                     for (j in oValues) {
-                        values.add(j.replace(Constant.domain, ""))
+                        values.add(j.replace(Constant.DOMAIN, ""))
                     }
                 }
                 newImageData[i.key] = values

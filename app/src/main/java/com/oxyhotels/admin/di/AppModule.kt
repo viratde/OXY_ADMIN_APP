@@ -4,22 +4,16 @@ import android.app.Application
 import android.content.Context
 import android.content.SharedPreferences
 import androidx.room.Room
+import com.google.gson.Gson
 import com.oxyhotels.admin.feature_auth.data.repository.AuthTokenRepositoryImpl
 import com.oxyhotels.admin.feature_auth.domain.repository.AuthDataRepository
 import com.oxyhotels.admin.feature_auth.domain.use_cases.AuthTokenUseCases
 import com.oxyhotels.admin.feature_auth.domain.use_cases.DeleteTokenUseCases
 import com.oxyhotels.admin.feature_auth.domain.use_cases.GetTokenUseCases
 import com.oxyhotels.admin.feature_auth.domain.use_cases.SetTokenUseCases
-import com.oxyhotels.admin.feature_booking.data.data_source.BookingDatabase
-import com.oxyhotels.admin.feature_booking.data.repository.BookingRepositoryImpl
-import com.oxyhotels.admin.feature_booking.domain.repository.BookingRepository
-import com.oxyhotels.admin.feature_booking.domain.use_cases.AddBookingUseCases
-import com.oxyhotels.admin.feature_booking.domain.use_cases.BookingUseCases
-import com.oxyhotels.admin.feature_booking.domain.use_cases.ClearBookingUseCases
-import com.oxyhotels.admin.feature_booking.domain.use_cases.DeleteBookingByBookingId
-import com.oxyhotels.admin.feature_booking.domain.use_cases.GetBookingByBookingId
-import com.oxyhotels.admin.feature_booking.domain.use_cases.GetBookingsUseCases
-import com.oxyhotels.admin.feature_booking.domain.use_cases.UpdateBookingUseCase
+import com.oxyhotels.admin.feature_location.domain.use_cases.ListAllLocationsUseCases
+import com.oxyhotels.admin.feature_location.domain.use_cases.LocationUseCases
+import com.oxyhotels.admin.feature_location.domain.use_cases.UpdateLocationUseCases
 import com.oxyhotels.admin.feature_manage_hotel.data.data_source.HotelDatabase
 import com.oxyhotels.admin.feature_manage_hotel.data.repositry.HotelRepositoryImpl
 import com.oxyhotels.admin.feature_manage_hotel.domain.repositry.HotelRepository
@@ -29,6 +23,9 @@ import com.oxyhotels.admin.feature_manage_hotel.domain.use_cases.ClearHotels
 import com.oxyhotels.admin.feature_manage_hotel.domain.use_cases.GetHotel
 import com.oxyhotels.admin.feature_manage_hotel.domain.use_cases.GetHotelById
 import com.oxyhotels.admin.feature_manage_hotel.domain.use_cases.HotelUseCases
+import com.oxyhotels.admin.feature_manager.domain.use_cases.ListAllManagerUseCases
+import com.oxyhotels.admin.feature_manager.domain.use_cases.ManagerUseCases
+import com.oxyhotels.admin.feature_manager.domain.use_cases.UpdateManagerUseCases
 import dagger.Module
 import dagger.Provides
 import dagger.hilt.InstallIn
@@ -42,8 +39,8 @@ object AppModule {
 
     @Provides
     @Singleton
-    fun provideSharedPreferences(app:Application) :SharedPreferences{
-        return app.getSharedPreferences("OXY_ADMIN_AUTH_DATA",Context.MODE_PRIVATE)
+    fun provideSharedPreferences(app: Application): SharedPreferences {
+        return app.getSharedPreferences("OXY_ADMIN_AUTH_DATA", Context.MODE_PRIVATE)
     }
 
     @Provides
@@ -56,42 +53,29 @@ object AppModule {
 
     @Provides
     @Singleton
-    fun providesAuthTokenUseCases(authDataRepository: AuthDataRepository) : AuthTokenUseCases {
+    fun providesAuthTokenUseCases(authDataRepository: AuthDataRepository): AuthTokenUseCases {
         return AuthTokenUseCases(
             getTokenUseCases = GetTokenUseCases(authDataRepository = authDataRepository),
             setTokenUseCases = SetTokenUseCases(authDataRepository = authDataRepository),
-            deleteTokenUseCases = DeleteTokenUseCases(authDataRepository = authDataRepository),)
+            deleteTokenUseCases = DeleteTokenUseCases(authDataRepository = authDataRepository),
+        )
     }
+
 
     @Provides
     @Singleton
-    fun providesRoomDatabase(app:Application) : BookingDatabase {
-        return Room.databaseBuilder(
-            app,
-            BookingDatabase::class.java,
-            BookingDatabase.DATABASE_NAME
-        ).build()
-    }
-
-    @Provides
-    @Singleton
-    fun providesHotelDatabase(app:Application) : HotelDatabase {
+    fun providesHotelDatabase(app: Application): HotelDatabase {
         return Room.databaseBuilder(
             app,
             HotelDatabase::class.java,
             HotelDatabase.DATABASE_NAME
-        ).build()
+        ).fallbackToDestructiveMigrationFrom(1).build()
     }
+
 
     @Provides
     @Singleton
-    fun providesBookingRepository(db: BookingDatabase) : BookingRepository {
-        return BookingRepositoryImpl(db.bookingDao)
-    }
-
-    @Provides
-    @Singleton
-    fun providesHotelRepository(db:HotelDatabase): HotelRepository {
+    fun providesHotelRepository(db: HotelDatabase): HotelRepository {
         return HotelRepositoryImpl(hotelDao = db.hotelDao)
     }
 
@@ -109,15 +93,35 @@ object AppModule {
 
     @Provides
     @Singleton
-    fun providesBookingUseCases(bookingRepository: BookingRepository) : BookingUseCases {
-        return BookingUseCases(
-            getBookingsUseCases = GetBookingsUseCases(bookingRepository = bookingRepository),
-            addBookingUseCases = AddBookingUseCases(bookingRepository = bookingRepository),
-            clearBookingUseCases = ClearBookingUseCases(bookingRepository = bookingRepository),
-            deleteBookingByBookingId = DeleteBookingByBookingId(bookingRepository = bookingRepository),
-            updateBookingUseCase = UpdateBookingUseCase(bookingRepository = bookingRepository),
-            getBookingByBookingId = GetBookingByBookingId(bookingRepository = bookingRepository)
+    fun providesGson(): Gson {
+        return Gson()
+    }
+
+    @Provides
+    @Singleton
+    fun providesManagerUseCases(gson: Gson): ManagerUseCases {
+        return ManagerUseCases(
+            listAllManagerUseCases = ListAllManagerUseCases(
+                gson = gson
+            ),
+            updateManagerUseCases = UpdateManagerUseCases(
+                gson = gson
+            )
         )
     }
+
+    @Provides
+    @Singleton
+    fun providesLocationUseCases(gson: Gson): LocationUseCases {
+        return LocationUseCases(
+            listAllLocationsUseCases = ListAllLocationsUseCases(
+                gson = gson
+            ),
+            updateLocationUseCases = UpdateLocationUseCases(
+                gson = gson
+            )
+        )
+    }
+
 
 }

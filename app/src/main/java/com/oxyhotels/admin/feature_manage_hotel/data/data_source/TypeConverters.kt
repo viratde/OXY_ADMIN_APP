@@ -33,26 +33,25 @@ class TypeConverters {
 
 
     @TypeConverter
-    fun fromRoomTypes(roomTypes: MutableMap<String, MutableMap<String, Any>>): String {
+    fun fromRoomTypes(roomTypes: Map<String, Map<String, Any>>): String {
         return Gson().toJson(roomTypes)
     }
 
     @TypeConverter
-    fun toRoomTypes(roomTypes: String): MutableMap<String, MutableMap<String, Any>> {
+    fun toRoomTypes(roomTypes: String): Map<String, Map<String, Any>> {
 
-        val typeToken = object : TypeToken<MutableMap<String, MutableMap<String, Any>>>() {}.type
-
+        val typeToken = object : TypeToken<Map<String, Map<String, Any>>>() {}.type
         return Gson().fromJson(roomTypes, typeToken)
     }
 
     @TypeConverter
-    fun fromFloorData(structure: List<List<ActualRoom>>): String {
+    fun fromFloorData(structure: Map<String,List<ActualRoom>>): String {
         return Gson().toJson(structure)
     }
 
     @TypeConverter
-    fun toFloorData(data:String):List<List<ActualRoom>> {
-        val typeToken = object : TypeToken<List<List<ActualRoom>>>() {}.type
+    fun toFloorData(data:String):Map<String,List<ActualRoom>> {
+        val typeToken = object : TypeToken<Map<String,List<ActualRoom>>>() {}.type
         return Gson().fromJson(data, typeToken)
     }
 

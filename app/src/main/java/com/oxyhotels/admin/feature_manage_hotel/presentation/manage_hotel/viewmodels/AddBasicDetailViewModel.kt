@@ -7,17 +7,30 @@ import kotlinx.coroutines.flow.update
 
 class AddBasicDetailViewModel(
     addBasicDetailState: AddBasicDetailState
-):ViewModel() {
+) : ViewModel() {
 
     private val _state = MutableStateFlow(addBasicDetailState)
-    val state : MutableStateFlow<AddBasicDetailState> = _state
-
+    val state: MutableStateFlow<AddBasicDetailState> = _state
 
 
     fun setHotelName(name: String) {
         _state.update {
             state.value.copy(hotelName = name)
         }
+    }
+
+    fun toggleListedState() {
+        _state.update {
+            state.value.copy(
+                isHotelListed = !state.value.isHotelListed
+            )
+        }
+    }
+
+    fun setTid(tid: String?) {
+        _state.value = state.value.copy(
+            tid = tid
+        )
     }
 
     fun setHotelId(id: String) {
@@ -40,11 +53,11 @@ class AddBasicDetailViewModel(
         }
     }
 
-    fun setHotelAddress(addr:String){
+    fun setHotelAddress(addr: String) {
         _state.value = state.value.copy(hotelAddress = addr)
     }
 
-    fun setHotelDescription(description:String){
+    fun setHotelDescription(description: String) {
         _state.value = state.value.copy(hotelDescription = description)
     }
 

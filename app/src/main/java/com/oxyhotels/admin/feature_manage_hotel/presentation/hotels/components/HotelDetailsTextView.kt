@@ -7,6 +7,7 @@ import androidx.compose.material3.MaterialTheme
 import androidx.compose.material3.Text
 import androidx.compose.runtime.Composable
 import androidx.compose.ui.Modifier
+import androidx.compose.ui.text.style.TextOverflow
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
 
@@ -35,7 +36,9 @@ fun HotelDetailsTextView(
                 fontSize = 15.sp,
                 color = MaterialTheme.colorScheme.secondary
             ),
-            modifier = Modifier.weight(1f)
+            modifier = Modifier.weight(1f),
+            overflow = TextOverflow.Ellipsis,
+            maxLines = 1
         )
     }
 

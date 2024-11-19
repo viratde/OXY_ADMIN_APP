@@ -7,7 +7,7 @@ import com.oxyhotels.admin.feature_manage_hotel.domain.model.HotelStorage
 
 @Database(
     entities = [HotelStorage::class],
-    version = 4,
+    version = 2,
     exportSchema = false
 )
 @androidx.room.TypeConverters(TypeConverters::class)

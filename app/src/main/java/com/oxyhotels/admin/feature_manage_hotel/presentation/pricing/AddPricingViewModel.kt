@@ -134,7 +134,7 @@ class AddPricingViewModel @Inject constructor(
                 pax3Price = state.value.pax3Price,
                 roomType = state.value.roomType
             )
-            val response:String = client.post("${Constant.domain}/admin/setPrice"){
+            val response:String = client.post("${Constant.DOMAIN}/admin/setPrice"){
                 headers {
                     append("Content-Type", "application/json")
                     append("Authorization", "Bearer $token")

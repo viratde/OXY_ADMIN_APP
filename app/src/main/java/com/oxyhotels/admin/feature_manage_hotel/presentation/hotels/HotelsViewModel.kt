@@ -83,6 +83,7 @@ class HotelsViewModel @Inject constructor(
             val typeToken = object : TypeToken<MutableList<HotelStorage>>() {}.type
             val serverHotels = Gson().fromJson<MutableList<HotelStorage>>(rData.data, typeToken)
 
+
             withContext(Dispatchers.IO){
                 hotelUseCases.clearHotels()
                 if(serverHotels != null){
